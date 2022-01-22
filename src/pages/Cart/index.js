@@ -1,15 +1,21 @@
 import React from 'react';
-import { 
-  MdRemoveCircleOutline, 
-  MdAddCircleOutline, 
-  MdDelete } from 'react-icons/md';
+import { connect, useDispatch } from 'react-redux';
 
-import { 
-  Container, 
-  ProductTable, 
-  Total } from './styles';
+import {
+  MdRemoveCircleOutline,
+  MdAddCircleOutline,
+  MdDelete
+} from 'react-icons/md';
 
-function Cart() {
+import {
+  Container,
+  ProductTable,
+  Total
+} from './styles';
+
+const Cart = ({ cart }) => {
+  const dispatch = useDispatch();
+
   return (
     <Container>
       <ProductTable>
@@ -21,25 +27,26 @@ function Cart() {
             <th>SUBTOTAL</th>
             <th />
           </tr>
-          </thead>
-          <tbody>
-            <tr>
+        </thead>
+        <tbody>
+          {cart.map((product) => (
+            <tr key={product.id}>
               <td>
-                <img 
-                  src="https://static.netshoes.com.br/produtos/tenis-adidas-runfalcon-20-masculino/26/3ZP-0573-026/3ZP-0573-026_detalhe1.jpg?ts=1626193145?ims=280x280"
-                  alt="Tênis"
+                <img
+                  src={product.image}
+                  alt={product.title}
                 />
               </td>
               <td>
-                <strong>Tênis muito massa</strong>
-                <span>R$134,20</span>
+                <strong>{product.title}</strong>
+                <span>{product.priceFormatted}</span>
               </td>
               <td>
                 <div>
                   <button type="button">
                     <MdRemoveCircleOutline size={20} color="7159c1" />
                   </button>
-                  <input type="number" readOnly value={1} />
+                  <input type="number" readOnly value={product.amount} />
                   <button type="button">
                     <MdAddCircleOutline size={20} color="7159c1" />
                   </button>
@@ -50,11 +57,18 @@ function Cart() {
               </td>
               <td>
                 <button type="button">
-                  <MdDelete size={20} color="9159c1" />
+                  <MdDelete
+                    size={20}
+                    color="9159c1"
+                    onClick={() =>
+                      dispatch({ type: 'REMOVE_FROM_CART', id: product.id })
+                    }
+                  />
                 </button>
               </td>
             </tr>
-          </tbody>
+          ))}
+        </tbody>
       </ProductTable>
 
       <footer>
@@ -71,4 +85,8 @@ function Cart() {
   );
 }
 
-export default Cart;
+const mapStateToProps = (state) => ({
+  cart: state.cart,
+});
+
+export default connect(mapStateToProps)(Cart);
