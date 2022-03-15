@@ -12,7 +12,7 @@ import * as CardActions from '../../store/modules/cart/actions';
 import { ProductList } from './styles';
 
 const Home = (props) => {
-  const { addToCart, amount } = props;
+  const { addToCartRequest, amount } = props;
 
   const [products, setProducts] = useState([]);
 
@@ -31,8 +31,8 @@ const Home = (props) => {
     getProducts();
   }, []);
 
-  const handleAddProduct = (product) => {
-    addToCart(product);
+  const handleAddProduct = (id) => {
+    addToCartRequest(id);
   }
 
   return (
@@ -47,7 +47,7 @@ const Home = (props) => {
 
           <button
             type="button"
-            onClick={() => handleAddProduct(product)}
+            onClick={() => handleAddProduct(product.id)}
           >
             <div>
               <MdAddShoppingCart size={16} color="#FFF" /> 
